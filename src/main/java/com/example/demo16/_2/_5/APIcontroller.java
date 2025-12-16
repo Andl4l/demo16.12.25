@@ -77,6 +77,8 @@ public class APIController {
         }
     }
 
+    //на 4
+
     //5
     // curl -X DELETE localhost:8080/posts/2
     @DeleteMapping("/posts/{index}")
