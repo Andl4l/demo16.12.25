@@ -1,7 +1,6 @@
 package com.example.demo16._2._5;
 
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -79,44 +78,69 @@ public class APIController {
 
     //на 4
 
-    //5
-    // curl -X DELETE localhost:8080/posts/2
-    @DeleteMapping("/posts/{index}")
-    public ResponseEntity<Void> deletePost_by_ID(@PathVariable("index") Integer id){
-        posts.remove(id);
-        return ResponseEntity.ok().build();
+    //1.1
+    // curl -X Post localhost:8080/posts/2 -H "Content-Type: application/json" -d "{ \"username\": \"Andl4l\", \"password\": \"pass1\", \"repeatPassword\": \"pass1\", \"age\": \"4\"}"
+    @PostMapping("/users")
+    public ResponseEntity<String> create_new_user(@RequestBody User_with_repeat_password new_new_user_with_repest_password){
+
+            if(new_new_user_with_repest_password.getPassword() == new_new_user_with_repest_password.getRepeatPassword()){
+                User user1 = new User(new_new_user_with_repest_password.getAge(), new_new_user_with_repest_password.getName(), new_new_user_with_repest_password.getPassword());
+                users.add(user1);
+                return ResponseEntity.ok().build();
+            }
+            else{
+                return ResponseEntity.badRequest().body("Не сошлось");
+            }
+
     }
 
-    //6
-    // curl -X DELETE localhost:8080/posts
-    @DeleteMapping("/posts")
-    public ResponseEntity<Void> delete_all_Posts(@PathVariable("index") Integer id){
-        posts.clear();
-        return ResponseEntity.ok().build();
-    }
-
-    //7
-    // curl -X GET localhost:8080/posts/count
-    @GetMapping("/posts/count")
-    public ResponseEntity<Integer> get_Number_of_Posts(){
-        return ResponseEntity.ok(posts.size());
-    }
-
-
-    //8
-    // curl -X GET localhost:8080/posts/author/vladimir
-    @GetMapping("/posts/author/{author}")
-    public ResponseEntity<List<Post>> get_Number_of_Posts(@RequestBody String author){
-        LinkedList<Post> authors_posts= new LinkedList<>();
-        for (int i = 0; i < posts.size(); i++) {
-            if(posts.get(i).getAuthor() == author){
-                authors_posts.add(posts.get(i));
+    //1.2
+    // curl -X Put localhost:8080/posts/2 -H "Content-Type: application/json" -d "{ \"username\": \"Andl4l\", \"password\": \"pass1\", \"repeatPassword\": \"pass1\", \"age\": \"4\"}"
+    @PutMapping("/users/{index}")
+    public ResponseEntity<String> update_user(@PathVariable("index") Integer id,
+                                                  @RequestBody User_with_repeat_password new_new_user_with_repest_password){
+        if (id<0 || id > users.size() - 1){
+            return ResponseEntity.notFound().build();
+        }
+        else {
+            if(new_new_user_with_repest_password.getPassword() == new_new_user_with_repest_password.getRepeatPassword()){
+                User user1 = new User(new_new_user_with_repest_password.getAge(), new_new_user_with_repest_password.getName(), new_new_user_with_repest_password.getPassword());
+                users.set(id, user1);
+                return ResponseEntity.ok().build();
+            }
+            else{
+                return ResponseEntity.badRequest().body("Не сошлось");
             }
         }
-        return ResponseEntity.ok(authors_posts);
     }
 
-    //на пятерку
+    //2
+    // curl -X GET localhost:8080/users/35
+    @GetMapping("/users/{age_index}")
+    public ResponseEntity<List<User>> get_users_in_a_bound(@PathVariable("age_index") Integer new_age){
+        List<User> users_age_in_a_bound = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            if((users.get(i).getAge() < new_age + 5) && (new_age - 5 < users.get(i).getAge())){
+                users_age_in_a_bound.add(users.get(i));
+            }
+        }
+        return ResponseEntity.ok(users_age_in_a_bound);
+    }
+
+    //на 5
+
+    //1
+    // curl -X GET localhost:8080/users/35
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> get_sorted_users_list(@PathVariable("age_index") Integer new_age){
+        List<User> users_age_in_a_bound = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            if((users.get(i).getAge() < new_age + 5) && (new_age - 5 < users.get(i).getAge())){
+                users_age_in_a_bound.add(users.get(i));
+            }
+        }
+        return ResponseEntity.ok(users_age_in_a_bound);
+    }
 
 
 

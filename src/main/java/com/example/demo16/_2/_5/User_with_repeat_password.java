@@ -2,6 +2,14 @@ package com.example.demo16._2._5;
 
 public class User_with_repeat_password extends User{
 
+    public void setRepeatPassword(String repeatPassword) {
+        this.repeatPassword = repeatPassword;
+    }
+
+    public String getRepeatPassword() {
+        return repeatPassword;
+    }
+
     private String repeatPassword;
 
 
